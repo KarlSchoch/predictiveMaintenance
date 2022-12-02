@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+# Build the app services
+  app:
+    build: app
+  nginx:
+    container_name: nginx
+    build: nginx
+    # Bind port 80 of container to machine port 80
+    ports:
+      - 80:80
+    # Make app as ngnix dependency service
+    depends_on:
+      - app
