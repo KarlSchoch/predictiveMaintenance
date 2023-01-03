@@ -58,3 +58,17 @@ def table_data():
     agg['thirty_day_mileage'] = agg['mileage'] + ( 30 * agg['daily_mileage'] )
     
     return agg
+
+def mileage_forecast(date_projection:str = 'seven') -> pd.DataFrame:
+    # Import queried data
+    df = table_data()
+
+    # Create Informational Columns
+    df['Oil Change'] = df[f'{date_projection}_day_mileage'] >= df['next_oil_change']
+    df['Brake Pads'] = df[f'{date_projection}_day_mileage'] >= df['next_brake_pad']
+    df['Assigned Officer'] = df['officer_first'] + " " + df['officer_last']
+
+    # Filter df to only include values that require maintenance
+    df = df[(df['Oil Change'] == True) | (df['Brake Pads'] == True)]
+
+    return df[['vin', 'make', 'model', 'year', 'mileage', 'Assigned Officer', 'Oil Change', 'Brake Pads']]

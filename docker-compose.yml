@@ -4,6 +4,10 @@ services:
 # Build the app services
   app:
     build: app
+  frontend:
+    build: frontend
+    volumes:
+      - ./frontend/src/.:/app/src/.
   nginx:
     container_name: nginx
     build: nginx
@@ -11,5 +15,6 @@ services:
     ports:
       - 80:80
     # Make app as ngnix dependency service
-    depends_on:
-      - app
+    #depends_on:
+    #  - app
+    #  - frontend
